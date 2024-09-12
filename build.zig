@@ -14,10 +14,20 @@ pub fn build(b: *std.Build) !void {
         .style = .{ .cmake = upstream.path("cmake/json_config.h.in") },
         .include_path = "json_config.h",
     }, .{ .JSON_C_HAVE_INTTYPES_H = 1, .JSON_C_HAVE_STDINT_H = 1 });
-    const json = b.addConfigHeader(.{
-        .style = .{ .cmake = upstream.path("json.h.cmakein") },
-        .include_path = "json.h",
-    }, .{ .JSON_H_JSON_PATCH = "#include <json_patch.h>", .JSON_H_JSON_POINTER = "#include <json_pointer.h>" });
+    const json = b.addConfigHeader(
+        .{
+            .style = .{ .cmake = upstream.path("json.h.cmakein") },
+            .include_path = "json.h",
+        },
+        .{
+            .JSON_H_JSON_PATCH =
+            \\#include "json_patch.h"
+            ,
+            .JSON_H_JSON_POINTER =
+            \\#include "json_pointer.h"
+            ,
+        },
+    );
 
     const lib = b.addStaticLibrary(.{
         .name = "json-c",
