@@ -1,0 +1,14 @@
+.{
+    .name = "json-c",
+    .version = "0.17.0",
+    .dependencies = .{
+        .upstream = .{
+            .url = "git+https://github.com/json-c/json-c?ref=json-c-0.17-20230812#b4c371fa0cbc4dcbaccc359ce9e957a22988fb34",
+            .hash = "1220aa451031c0f1e2deedd83bb86eb1d5394bfe83c2ab9ce1a85a1bf0ed4d632586",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+    },
+}
