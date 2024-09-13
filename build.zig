@@ -10,10 +10,16 @@ pub fn build(b: *std.Build) !void {
         .style = .{ .cmake = upstream.path("cmake/config.h.in") },
         .include_path = "config.h",
     }, cmake_config);
-    const json_config = b.addConfigHeader(.{
-        .style = .{ .cmake = upstream.path("cmake/json_config.h.in") },
-        .include_path = "json_config.h",
-    }, .{ .JSON_C_HAVE_INTTYPES_H = 1, .JSON_C_HAVE_STDINT_H = 1 });
+    const json_config = b.addConfigHeader(
+        .{
+            .style = .{ .cmake = upstream.path("cmake/json_config.h.in") },
+            .include_path = "json_config.h",
+        },
+        .{
+            .JSON_C_HAVE_INTTYPES_H = 1,
+            .JSON_C_HAVE_STDINT_H = 1,
+        },
+    );
     const json = b.addConfigHeader(
         .{
             .style = .{ .cmake = upstream.path("json.h.cmakein") },
@@ -36,10 +42,9 @@ pub fn build(b: *std.Build) !void {
         .link_libc = true,
     });
     lib.addConfigHeader(config);
-    lib.installHeader(config.getOutput(), "json-c/config.h");
     lib.addConfigHeader(json_config);
-    lib.installHeader(json_config.getOutput(), "json-c/json_config.h");
     lib.addConfigHeader(json);
+    lib.installHeader(json_config.getOutput(), "json-c/json_config.h");
     lib.installHeader(json.getOutput(), "json-c/json.h");
     lib.addIncludePath(upstream.path(""));
     lib.root_module.addCMacro("_GNU_SOURCE", "1");
@@ -64,18 +69,35 @@ pub fn build(b: *std.Build) !void {
         },
         .flags = &CFLAGS,
     });
-    lib.installHeadersDirectory(upstream.path(""), "json-c", .{});
+    lib.installHeadersDirectory(upstream.path(""), "json-c", .{
+        .include_extensions = &.{
+            "arraylist.h",
+            "debug.h",
+            "json_c_version.h",
+            "json_inttypes.h",
+            "json_object.h",
+            "json_object_iterator.h",
+            "json_tokener.h",
+            "json_types.h",
+            "json_util.h",
+            "json_visit.h",
+            "linkhash.h",
+            "printbuf.h",
+        },
+    });
     b.installArtifact(lib);
 }
 
 const CFLAGS = .{
     "-Wall",
     "-Wextra",
-    "-Wformat=2",
-    "-Wmissing-prototypes",
+    "-Wcast-qual",
+    "-Wwrite-strings",
     "-Wmissing-declarations",
     "-Wold-style-definition",
     "-Wstrict-prototypes",
+    "-Werror",
+    "-Wno-unused-parameter",
 };
 
 const cmake_config = .{
