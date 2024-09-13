@@ -83,6 +83,8 @@ pub fn build(b: *std.Build) !void {
             "json_visit.h",
             "linkhash.h",
             "printbuf.h",
+            "json_pointer.h",
+            "json_patch.h",
         },
     });
     b.installArtifact(lib);
