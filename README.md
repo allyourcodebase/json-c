@@ -2,11 +2,15 @@
 
 Provides a package to be used by the zig package manager for C programs.
 
+## Status
+
+For now the hard-coded config assumes linux.
+
 ## Use
 
 Add the dependency in your `build.zig.zon` by running the following command:
 ```bash
-zig fetch --save git+https://github.com/Orolia2s/json-c#0.17
+zig fetch --save git+https://github.com/allyourcodebase/json-c#0.17
 ```
 
 Then, in your `build.zig`:
