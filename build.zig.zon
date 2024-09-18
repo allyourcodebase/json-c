@@ -1,11 +1,11 @@
 .{
     .name = "json-c",
-    .version = "0.17.0",
+    .version = "0.18.0",
     .minimum_zig_version = "0.12.0",
     .dependencies = .{
         .upstream = .{
-            .url = "git+https://github.com/json-c/json-c?ref=json-c-0.17-20230812#b4c371fa0cbc4dcbaccc359ce9e957a22988fb34",
-            .hash = "1220aa451031c0f1e2deedd83bb86eb1d5394bfe83c2ab9ce1a85a1bf0ed4d632586",
+            .url = "git+https://github.com/json-c/json-c?ref=json-c-0.18-20240915#41a55cfcedb54d9c1874f2f0eb07b504091d7e37",
+            .hash = "12208b714ab345c47972d351d67d6dc000d752256fa2f121665842df31d0fb4ac13f",
         },
     },
     .paths = .{

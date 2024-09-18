@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const version = .{ .major = 0, .minor = 17 };
+const version = .{ .major = 0, .minor = 18 };
 
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
