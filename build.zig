@@ -1,15 +1,20 @@
 const std = @import("std");
 
+const version = .{ .major = 0, .minor = 17 };
+
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
     const upstream = b.dependency("upstream", .{ .target = target, .optimize = optimize });
 
-    const config = b.addConfigHeader(.{
-        .style = .{ .cmake = upstream.path("cmake/config.h.in") },
-        .include_path = "config.h",
-    }, cmake_config);
+    const config = b.addConfigHeader(
+        .{
+            .style = .{ .cmake = upstream.path("cmake/config.h.in") },
+            .include_path = "config.h",
+        },
+        cmake_config,
+    );
     const json_config = b.addConfigHeader(
         .{
             .style = .{ .cmake = upstream.path("cmake/json_config.h.in") },
@@ -41,54 +46,60 @@ pub fn build(b: *std.Build) !void {
         .optimize = optimize,
         .link_libc = true,
     });
+    lib.addIncludePath(upstream.path(""));
     lib.addConfigHeader(config);
     lib.addConfigHeader(json_config);
     lib.addConfigHeader(json);
     lib.installHeader(json_config.getOutput(), "json-c/json_config.h");
     lib.installHeader(json.getOutput(), "json-c/json.h");
-    lib.addIncludePath(upstream.path(""));
     lib.root_module.addCMacro("_GNU_SOURCE", "1");
     lib.addCSourceFiles(.{
         .root = upstream.path(""),
-        .files = &.{
-            "arraylist.c",
-            "debug.c",
-            "json_c_version.c",
-            "json_object.c",
-            "json_object_iterator.c",
-            "json_patch.c",
-            "json_pointer.c",
-            "json_tokener.c",
-            "json_util.c",
-            "json_visit.c",
-            "libjson.c",
-            "linkhash.c",
-            "printbuf.c",
-            "random_seed.c",
-            "strerror_override.c",
-        },
+        .files = &source_files,
         .flags = &CFLAGS,
     });
-    lib.installHeadersDirectory(upstream.path(""), "json-c", .{
-        .include_extensions = &.{
-            "arraylist.h",
-            "debug.h",
-            "json_c_version.h",
-            "json_inttypes.h",
-            "json_object.h",
-            "json_object_iterator.h",
-            "json_tokener.h",
-            "json_types.h",
-            "json_util.h",
-            "json_visit.h",
-            "linkhash.h",
-            "printbuf.h",
-            "json_pointer.h",
-            "json_patch.h",
-        },
-    });
+    lib.installHeadersDirectory(
+        upstream.path(""),
+        "json-c",
+        .{ .include_extensions = &public_headers },
+    );
     b.installArtifact(lib);
 }
+
+const source_files = .{
+    "arraylist.c",
+    "debug.c",
+    "json_c_version.c",
+    "json_object.c",
+    "json_object_iterator.c",
+    "json_patch.c",
+    "json_pointer.c",
+    "json_tokener.c",
+    "json_util.c",
+    "json_visit.c",
+    "libjson.c",
+    "linkhash.c",
+    "printbuf.c",
+    "random_seed.c",
+    "strerror_override.c",
+};
+
+const public_headers = .{
+    "arraylist.h",
+    "debug.h",
+    "json_c_version.h",
+    "json_inttypes.h",
+    "json_object.h",
+    "json_object_iterator.h",
+    "json_patch.h",
+    "json_pointer.h",
+    "json_tokener.h",
+    "json_types.h",
+    "json_util.h",
+    "json_visit.h",
+    "linkhash.h",
+    "printbuf.h",
+};
 
 const CFLAGS = .{
     "-Wall",
@@ -155,4 +166,14 @@ const cmake_config = .{
     .SIZEOF_SSIZE_T = @sizeOf(isize),
     .SPEC___THREAD = "__thread",
     .STDC_HEADERS = 1,
+
+    .json_c_strtoll = null,
+    .json_c_strtoull = null,
+    .PROJECT_NAME = "json-c",
+    .JSON_C_BUGREPORT = "json-c@googlegroups.com",
+    .CPACK_PACKAGE_VERSION_MAJOR = version.major,
+    .CPACK_PACKAGE_VERSION_MINOR = version.minor,
+    .CPACK_PACKAGE_VERSION_PATCH = 0,
+    .ENABLE_RDRAND = null,
+    .OVERRIDE_GET_RANDOM_SEED = null,
 };
