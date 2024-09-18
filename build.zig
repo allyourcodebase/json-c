@@ -59,7 +59,7 @@ pub fn build(b: *std.Build) !void {
         .flags = &CFLAGS,
     });
     lib.installHeadersDirectory(
-        upstream.path(""),
+        upstream.path("./"),
         "json-c",
         .{ .include_extensions = &public_headers },
     );
