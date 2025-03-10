@@ -39,6 +39,14 @@ pub fn build(b: *std.Build) !void {
             ,
         },
     );
+    config.addValues(.{
+        .SIZEOF_INT = target.result.cTypeByteSize(.int),
+        .SIZEOF_INT64_T = @sizeOf(i64),
+        .SIZEOF_LONG = target.result.cTypeByteSize(.long),
+        .SIZEOF_LONG_LONG = target.result.cTypeByteSize(.longlong),
+        .SIZEOF_SIZE_T = @sizeOf(usize),
+        .SIZEOF_SSIZE_T = @sizeOf(isize),
+    });
 
     const lib = b.addStaticLibrary(.{
         .name = "json-c",
@@ -158,12 +166,6 @@ const cmake_config = .{
     .HAVE_STRTOULL = 1,
     .HAVE___THREAD = 1,
     .JSON_C_HAVE_INTTYPES_H = 1,
-    .SIZEOF_INT = @sizeOf(c_int),
-    .SIZEOF_INT64_T = @sizeOf(i64),
-    .SIZEOF_LONG = @sizeOf(c_long),
-    .SIZEOF_LONG_LONG = @sizeOf(c_longlong),
-    .SIZEOF_SIZE_T = @sizeOf(usize),
-    .SIZEOF_SSIZE_T = @sizeOf(isize),
     .SPEC___THREAD = "__thread",
     .STDC_HEADERS = 1,
 

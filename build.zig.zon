@@ -1,7 +1,8 @@
 .{
-    .name = "json-c",
+    .name = .jsonc,
     .version = "0.18.0",
-    .minimum_zig_version = "0.12.0",
+    .minimum_zig_version = "0.14.0",
+    .fingerprint = 0x646d55b66fb40d,
     .dependencies = .{
         .upstream = .{
             .url = "git+https://github.com/json-c/json-c?ref=json-c-0.18-20240915#41a55cfcedb54d9c1874f2f0eb07b504091d7e37",
