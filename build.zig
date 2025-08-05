@@ -48,11 +48,13 @@ pub fn build(b: *std.Build) !void {
         .SIZEOF_SSIZE_T = @sizeOf(isize),
     });
 
-    const lib = b.addStaticLibrary(.{
+    const lib = b.addLibrary(.{
         .name = "json-c",
-        .target = target,
-        .optimize = optimize,
-        .link_libc = true,
+        .root_module = b.createModule(.{
+            .target = target,
+            .optimize = optimize,
+            .link_libc = true,
+        }),
     });
     lib.addIncludePath(upstream.path(""));
     lib.addConfigHeader(config);
