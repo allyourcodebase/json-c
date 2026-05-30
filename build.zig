@@ -6,7 +6,7 @@ pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    const upstream = b.dependency("upstream", .{ .target = target, .optimize = optimize });
+    const upstream = b.dependency("upstream", .{});
 
     const config = b.addConfigHeader(
         .{
@@ -56,14 +56,14 @@ pub fn build(b: *std.Build) !void {
             .link_libc = true,
         }),
     });
-    lib.addIncludePath(upstream.path(""));
-    lib.addConfigHeader(config);
-    lib.addConfigHeader(json_config);
-    lib.addConfigHeader(json);
-    lib.installHeader(json_config.getOutput(), "json-c/json_config.h");
-    lib.installHeader(json.getOutput(), "json-c/json.h");
+    lib.root_module.addIncludePath(upstream.path(""));
+    lib.root_module.addConfigHeader(config);
+    lib.root_module.addConfigHeader(json_config);
+    lib.root_module.addConfigHeader(json);
+    lib.installHeader(json_config.getOutputFile(), "json-c/json_config.h");
+    lib.installHeader(json.getOutputFile(), "json-c/json.h");
     lib.root_module.addCMacro("_GNU_SOURCE", "1");
-    lib.addCSourceFiles(.{
+    lib.root_module.addCSourceFiles(.{
         .root = upstream.path(""),
         .files = &source_files,
         .flags = &CFLAGS,

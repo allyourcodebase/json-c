@@ -6,7 +6,7 @@
     .dependencies = .{
         .upstream = .{
             .url = "git+https://github.com/json-c/json-c?ref=json-c-0.18-20240915#41a55cfcedb54d9c1874f2f0eb07b504091d7e37",
-            .hash = "12208b714ab345c47972d351d67d6dc000d752256fa2f121665842df31d0fb4ac13f",
+            .hash = "N-V-__8AAMwQHgCLcUqzRcR5ctNR1n1twADXUiVvovEhZlhC",
         },
     },
     .paths = .{
